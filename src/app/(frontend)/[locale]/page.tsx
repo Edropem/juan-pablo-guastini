@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
+import { MediaImage } from '@/components/MediaImage'
 import { PageMotion } from '@/components/PageMotion'
 import { ProjectList } from '@/components/ProjectList'
 import { getDictionary } from '@/i18n/getDictionary'
@@ -19,6 +20,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({ locale: localeParam, path: '' })
 }
 
+function resolveCtaHref(ctaHref: string | null | undefined, locale: Locale): string {
+  if (!ctaHref) return `/${locale}/work`
+  if (/^https?:\/\//i.test(ctaHref)) return ctaHref
+  if (ctaHref.startsWith('/')) {
+    if (ctaHref === `/${locale}` || ctaHref.startsWith(`/${locale}/`)) return ctaHref
+    return `/${locale}${ctaHref}`
+  }
+  return `/${locale}/${ctaHref}`
+}
+
 export default async function HomePage({ params }: Props) {
   const { locale: localeParam } = await params
   if (!isLocale(localeParam)) notFound()
@@ -31,17 +42,32 @@ export default async function HomePage({ params }: Props) {
     getFeaturedProjects(locale),
   ])
 
+  const hasHeroImage = Boolean(home.heroImage && typeof home.heroImage === 'object')
+
   return (
     <PageMotion>
-      <section className="hero">
-        <h1 className="hero__brand">{siteSettings.siteName || 'Juan Pablo Guastini'}</h1>
-        {home.headline ? <p className="hero__headline">{home.headline}</p> : null}
-        {home.subhead || home.intro ? (
-          <p className="hero__subhead">{home.subhead || home.intro}</p>
+      <section className={hasHeroImage ? 'hero hero--with-image' : 'hero'}>
+        <div className="hero__copy">
+          <h1 className="hero__brand">{siteSettings.siteName || 'Juan Pablo Guastini'}</h1>
+          {home.headline ? <p className="hero__headline">{home.headline}</p> : null}
+          {home.subhead || home.intro ? (
+            <p className="hero__subhead">{home.subhead || home.intro}</p>
+          ) : null}
+          <Link href={resolveCtaHref(home.ctaHref, locale)} className="hero__cta">
+            {home.ctaLabel || dictionary.home.cta}
+          </Link>
+        </div>
+        {hasHeroImage ? (
+          <div className="hero__media">
+            <MediaImage
+              media={home.heroImage}
+              fill
+              priority
+              sizes="(max-width: 900px) 100vw, 50vw"
+              className="hero__image"
+            />
+          </div>
         ) : null}
-        <Link href={`/${locale}/work`} className="hero__cta">
-          {home.ctaLabel || dictionary.home.cta}
-        </Link>
       </section>
 
       <section className="section" aria-labelledby="featured-heading">

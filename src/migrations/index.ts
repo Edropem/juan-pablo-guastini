@@ -1,5 +1,6 @@
 import * as migration_20260409_155706_initial from './20260409_155706_initial';
 import * as migration_20260731_211616_portfolio_schema from './20260731_211616_portfolio_schema';
+import * as migration_20260731_215057_hero_image from './20260731_215057_hero_image';
 
 export const migrations = [
   {
@@ -10,6 +11,11 @@ export const migrations = [
   {
     up: migration_20260731_211616_portfolio_schema.up,
     down: migration_20260731_211616_portfolio_schema.down,
-    name: '20260731_211616_portfolio_schema'
+    name: '20260731_211616_portfolio_schema',
+  },
+  {
+    up: migration_20260731_215057_hero_image.up,
+    down: migration_20260731_215057_hero_image.down,
+    name: '20260731_215057_hero_image'
   },
 ];

@@ -65,7 +65,7 @@ pnpm payload migrate
 ### 4. Author content
 
 1. **Globals → Site Settings** — site name, email, social links, default SEO, footer line (EN + ES)
-2. **Globals → Home** — headline, subhead, intro, CTA label
+2. **Globals → Home → Hero** — hero image, headline, subhead, intro, CTA label/link (brand name comes from Site Settings)
 3. **Globals → About** — bio, portrait, credits
 4. **Media** — upload images from Drive (or elsewhere)
 5. **Projects** — title, slug, year, disciplines, summary, cover, gallery, body; mark **featured** and set **order**

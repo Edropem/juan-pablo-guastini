@@ -533,10 +533,18 @@ export interface SiteSetting {
  */
 export interface Home {
   id: number;
+  /**
+   * Main hero image on the homepage.
+   */
+  heroImage?: (number | null) | Media;
   headline?: string | null;
   subhead?: string | null;
   intro?: string | null;
   ctaLabel?: string | null;
+  /**
+   * Optional path or URL. Defaults to the Work page for the current locale.
+   */
+  ctaHref?: string | null;
   /**
    * Optional. If empty, featured projects from the Projects collection are used.
    */
@@ -604,10 +612,12 @@ export interface SiteSettingsSelect<T extends boolean = true> {
  * via the `definition` "home_select".
  */
 export interface HomeSelect<T extends boolean = true> {
+  heroImage?: T;
   headline?: T;
   subhead?: T;
   intro?: T;
   ctaLabel?: T;
+  ctaHref?: T;
   featuredProjects?: T;
   updatedAt?: T;
   createdAt?: T;

@@ -1,0 +1,41 @@
+{
+  "nav": {
+    "work": "Trabajo",
+    "about": "Acerca de",
+    "contact": "Contacto",
+    "home": "Inicio"
+  },
+  "home": {
+    "cta": "Ver trabajo",
+    "featured": "Trabajo seleccionado",
+    "empty": "Los proyectos aparecerán aquí una vez publicados en el CMS."
+  },
+  "work": {
+    "title": "Trabajo",
+    "empty": "Aún no hay proyectos.",
+    "back": "Volver al trabajo"
+  },
+  "about": {
+    "title": "Acerca de",
+    "empty": "El contenido sobre mí aparecerá aquí una vez escrito en el CMS."
+  },
+  "contact": {
+    "title": "Contacto",
+    "intro": "Abierto a colaboraciones y encargos.",
+    "emailLabel": "Correo",
+    "name": "Nombre",
+    "email": "Correo",
+    "message": "Mensaje",
+    "send": "Enviar mensaje",
+    "sending": "Enviando…",
+    "success": "Gracias. Tu mensaje ha sido enviado.",
+    "error": "Algo salió mal. Inténtalo de nuevo o escribe por correo.",
+    "socials": "Enlaces"
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados."
+  },
+  "common": {
+    "loading": "Cargando"
+  }
+}

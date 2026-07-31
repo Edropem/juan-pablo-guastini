@@ -1,0 +1,41 @@
+{
+  "nav": {
+    "work": "Work",
+    "about": "About",
+    "contact": "Contact",
+    "home": "Home"
+  },
+  "home": {
+    "cta": "View work",
+    "featured": "Selected work",
+    "empty": "Projects will appear here once published in the CMS."
+  },
+  "work": {
+    "title": "Work",
+    "empty": "No projects yet.",
+    "back": "Back to work"
+  },
+  "about": {
+    "title": "About",
+    "empty": "About content will appear here once authored in the CMS."
+  },
+  "contact": {
+    "title": "Contact",
+    "intro": "Open for collaborations and commissions.",
+    "emailLabel": "Email",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "send": "Send message",
+    "sending": "Sending…",
+    "success": "Thank you. Your message has been sent.",
+    "error": "Something went wrong. Please try again or email directly.",
+    "socials": "Elsewhere"
+  },
+  "footer": {
+    "rights": "All rights reserved."
+  },
+  "common": {
+    "loading": "Loading"
+  }
+}

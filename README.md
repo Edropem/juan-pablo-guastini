@@ -98,4 +98,4 @@ Contact form submissions appear under **Form Submissions**.
 
 ## Design notes
 
-Minimal Bauhaus-leaning editorial layout (typography-first project list inspired by [luyu.co](https://luyu.co/)): Syne + Space Grotesk, paper/ink palette, single red accent, subtle motion with `prefers-reduced-motion` support.
+Minimal Bauhaus-leaning editorial layout (typography-first project list inspired by [luyu.co](https://luyu.co/)): Syne + Space Grotesk, dark ink palette, muted red used sparingly, subtle motion with `prefers-reduced-motion` support.

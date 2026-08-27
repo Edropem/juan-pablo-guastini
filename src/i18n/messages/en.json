@@ -13,7 +13,13 @@
   "work": {
     "title": "Work",
     "empty": "No projects yet.",
-    "back": "Back to work"
+    "back": "Back to work",
+    "categories": "Categories",
+    "uncategorized": "Other",
+    "close": "Close",
+    "previous": "Previous",
+    "next": "Next",
+    "openGallery": "Open gallery"
   },
   "about": {
     "title": "About",

@@ -13,7 +13,13 @@
   "work": {
     "title": "Trabajo",
     "empty": "Aún no hay proyectos.",
-    "back": "Volver al trabajo"
+    "back": "Volver al trabajo",
+    "categories": "Categorías",
+    "uncategorized": "Otros",
+    "close": "Cerrar",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "openGallery": "Abrir galería"
   },
   "about": {
     "title": "Acerca de",

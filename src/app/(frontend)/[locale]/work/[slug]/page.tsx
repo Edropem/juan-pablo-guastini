@@ -55,7 +55,6 @@ export default async function ProjectPage({ params }: Props) {
           {disciplines ? <span>{disciplines}</span> : null}
           {project.year ? <span>{project.year}</span> : null}
         </div>
-        {project.summary ? <p>{project.summary}</p> : null}
       </header>
 
       {project.cover && typeof project.cover === 'object' ? (
@@ -64,10 +63,18 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       ) : null}
 
+      {project.summary ? <p className="project-detail__summary">{project.summary}</p> : null}
+
       <RichText data={project.body as DefaultTypedEditorState | null | undefined} />
 
       {project.gallery && project.gallery.length > 0 ? (
-        <ProjectGallery gallery={project.gallery} />
+        <ProjectGallery
+          gallery={project.gallery}
+          closeLabel={dictionary.work.close}
+          previousLabel={dictionary.work.previous}
+          nextLabel={dictionary.work.next}
+          openGalleryLabel={dictionary.work.openGallery}
+        />
       ) : null}
     </PageMotion>
   )

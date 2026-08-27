@@ -305,6 +305,39 @@ img {
   font-weight: 700;
 }
 
+.work-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.35rem;
+  margin: -0.5rem 0 2.75rem;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.work-nav__tab {
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-transform: inherit;
+  letter-spacing: inherit;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+
+.work-nav__tab:hover {
+  color: var(--color-ink);
+}
+
+.work-nav__tab.active {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
 .project-list {
   margin: 0;
   padding: 0;
@@ -400,7 +433,7 @@ img {
 .project-detail__header {
   display: grid;
   gap: 1rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.5rem;
   max-width: 48rem;
 }
 
@@ -415,7 +448,7 @@ img {
 }
 
 .project-detail__cover {
-  margin: 0 0 2.5rem;
+  margin: 0 0 2rem;
   border: 1px solid var(--color-line);
   overflow: hidden;
   background: var(--color-surface);
@@ -426,24 +459,155 @@ img {
   height: auto;
 }
 
+.project-detail__summary {
+  margin: 0 0 1.5rem;
+  max-width: 48rem;
+  color: var(--color-muted);
+}
+
 .project-gallery {
-  display: grid;
-  gap: 1.5rem;
+  position: relative;
   margin-top: 2.5rem;
+}
+
+.project-gallery__thumbs {
+  display: grid;
+  grid-template-columns: repeat(var(--gallery-cols, 3), minmax(0, 1fr));
+  gap: 0.75rem;
 }
 
 .project-gallery__item {
   margin: 0;
+}
+
+.project-gallery__thumb {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
   border: 1px solid var(--color-line);
+  background: var(--color-surface);
+}
+
+.project-gallery__thumb img {
+  object-fit: cover;
+}
+
+.project-gallery__cta {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: rgba(11, 11, 10, 0.48);
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.project-gallery__cta:hover {
+  background: rgba(11, 11, 10, 0.34);
+}
+
+.project-gallery__cta-label {
+  padding: 0.75rem 1.1rem;
+  border: 1px solid var(--color-ink);
+  background: #000;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-ink);
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.project-gallery__cta:hover .project-gallery__cta-label {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 4.5rem 1.5rem 1.5rem;
+  background: rgba(11, 11, 10, 0.97);
+}
+
+.lightbox__close {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.5rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+
+.lightbox__close:hover {
+  color: var(--color-ink);
+}
+
+.lightbox__stage {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: center;
+  width: min(100%, 1100px);
+}
+
+.lightbox__figure {
+  margin: 0;
+  min-width: 0;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.lightbox__image {
   overflow: hidden;
   background: var(--color-surface);
 }
 
-.project-gallery__item figcaption {
-  padding: 0.75rem 1rem;
+.lightbox__image img {
+  width: 100%;
+  height: auto;
+  max-height: 78vh;
+  object-fit: contain;
+  -webkit-user-drag: none;
+}
+
+.lightbox__caption {
+  margin-top: 0.75rem;
   font-size: 0.9rem;
   color: var(--color-muted);
-  border-top: 1px solid var(--color-line);
+}
+
+.lightbox__nav {
+  margin: 0;
+  padding: 0.35rem;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 1.85rem;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+
+.lightbox__nav:hover {
+  color: var(--color-ink);
 }
 
 .back-link {
@@ -630,5 +794,23 @@ img {
 
   .site-header__nav {
     justify-content: flex-start;
+  }
+
+  .lightbox {
+    padding: 4rem 0.35rem 1rem;
+  }
+
+  .lightbox__stage {
+    grid-template-columns: 2.25rem minmax(0, 1fr) 2.25rem;
+    gap: 0.2rem;
+    width: 100%;
+  }
+
+  .lightbox__nav {
+    font-size: 1.6rem;
+  }
+
+  .lightbox__figure {
+    touch-action: none;
   }
 }

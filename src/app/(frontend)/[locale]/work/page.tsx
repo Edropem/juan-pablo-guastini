@@ -3,8 +3,10 @@ import { notFound } from 'next/navigation'
 
 import { PageMotion } from '@/components/PageMotion'
 import { ProjectList } from '@/components/ProjectList'
+import { WorkIndex } from '@/components/WorkIndex'
 import { getDictionary } from '@/i18n/getDictionary'
 import { isLocale, type Locale } from '@/i18n/config'
+import { groupProjectsByLabel } from '@/lib/projects'
 import { getProjects } from '@/lib/queries'
 import { buildMetadata } from '@/lib/seo'
 
@@ -30,11 +32,21 @@ export default async function WorkPage({ params }: Props) {
 
   const dictionary = getDictionary(locale)
   const projects = await getProjects(locale)
+  const groups = groupProjectsByLabel(projects, dictionary.work.uncategorized)
 
   return (
     <PageMotion>
       <h1 className="page-title">{dictionary.work.title}</h1>
-      <ProjectList projects={projects} locale={locale} emptyLabel={dictionary.work.empty} />
+      {groups.length > 0 ? (
+        <WorkIndex
+          groups={groups}
+          locale={locale}
+          emptyLabel={dictionary.work.empty}
+          categoriesLabel={dictionary.work.categories}
+        />
+      ) : (
+        <ProjectList projects={projects} locale={locale} emptyLabel={dictionary.work.empty} />
+      )}
     </PageMotion>
   )
 }

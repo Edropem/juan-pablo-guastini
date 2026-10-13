@@ -33,7 +33,14 @@ export function MediaImage({
   const alt = getMediaAlt(media)
   const intrinsicWidth = width ?? media.width ?? 1600
   const intrinsicHeight = height ?? media.height ?? 1200
-  const imageClassName = clsx(className, 'media-image', loaded && 'media-image--loaded')
+  // Priority images should appear as soon as they're ready — the page's own
+  // entrance motion already handles their reveal. Only fade in lazy-loaded
+  // images, where it masks real network latency instead of adding to it.
+  const imageClassName = clsx(
+    className,
+    !priority && 'media-image',
+    !priority && loaded && 'media-image--loaded',
+  )
 
   if (fill) {
     return (

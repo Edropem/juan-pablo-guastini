@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
-import { MediaImage } from '@/components/MediaImage'
+import { Hero } from '@/components/Hero'
+import { Marquee } from '@/components/Marquee'
 import { PageMotion } from '@/components/PageMotion'
 import { ProjectList } from '@/components/ProjectList'
 import { getDictionary } from '@/i18n/getDictionary'
@@ -42,33 +42,23 @@ export default async function HomePage({ params }: Props) {
     getFeaturedProjects(locale),
   ])
 
-  const hasHeroImage = Boolean(home.heroImage && typeof home.heroImage === 'object')
+  const siteName = siteSettings.siteName || 'Juan Pablo Guastini'
+  const marqueeItems = [siteName, home.headline, dictionary.home.featured].filter(
+    (item): item is string => Boolean(item),
+  )
 
   return (
     <PageMotion>
-      <section className={hasHeroImage ? 'hero hero--with-image' : 'hero'}>
-        <div className="hero__copy">
-          <h1 className="hero__brand">{siteSettings.siteName || 'Juan Pablo Guastini'}</h1>
-          {home.headline ? <p className="hero__headline">{home.headline}</p> : null}
-          {home.subhead || home.intro ? (
-            <p className="hero__subhead">{home.subhead || home.intro}</p>
-          ) : null}
-          <Link href={resolveCtaHref(home.ctaHref, locale)} className="hero__cta">
-            {home.ctaLabel || dictionary.home.cta}
-          </Link>
-        </div>
-        {hasHeroImage ? (
-          <div className="hero__media">
-            <MediaImage
-              media={home.heroImage}
-              fill
-              priority
-              sizes="(max-width: 900px) 100vw, 50vw"
-              className="hero__image"
-            />
-          </div>
-        ) : null}
-      </section>
+      <Hero
+        siteName={siteName}
+        eyebrow={home.headline}
+        subhead={home.subhead || home.intro}
+        ctaLabel={home.ctaLabel || dictionary.home.cta}
+        ctaHref={resolveCtaHref(home.ctaHref, locale)}
+        heroImage={home.heroImage}
+      />
+
+      <Marquee items={marqueeItems} />
 
       <section className="section" aria-labelledby="featured-heading">
         <h2 id="featured-heading" className="section__label">

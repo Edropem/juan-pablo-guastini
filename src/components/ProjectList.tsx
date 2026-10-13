@@ -30,10 +30,10 @@ export function ProjectList({ projects, locale, emptyLabel }: Props) {
           <motion.li
             key={project.id}
             className="project-list__item"
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            initial={{ opacity: 0, clipPath: 'inset(0 0 100% 0)' }}
+            whileInView={{ opacity: 1, clipPath: 'inset(0 0 0% 0)' }}
+            viewport={{ once: true, margin: '-40px 0px -40px 0px' }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
             <Link href={`/${locale}/work/${project.slug}`} className="project-list__link">
               <div className="project-list__meta">

@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation'
 import { MediaImage } from '@/components/MediaImage'
 import { PageMotion } from '@/components/PageMotion'
 import { ProjectGallery } from '@/components/ProjectGallery'
+import { Reveal } from '@/components/Reveal'
 import { RichText } from '@/components/RichText'
 import { getDictionary } from '@/i18n/getDictionary'
 import { isLocale, type Locale } from '@/i18n/config'
@@ -49,18 +50,22 @@ export default async function ProjectPage({ params }: Props) {
         ← {dictionary.work.back}
       </Link>
 
-      <header className="project-detail__header">
-        <h1 className="page-title">{project.title}</h1>
-        <div className="project-detail__meta">
-          {disciplines ? <span>{disciplines}</span> : null}
-          {project.year ? <span>{project.year}</span> : null}
-        </div>
-      </header>
+      <Reveal>
+        <header className="project-detail__header">
+          <h1 className="page-title">{project.title}</h1>
+          <div className="project-detail__meta">
+            {disciplines ? <span>{disciplines}</span> : null}
+            {project.year ? <span>{project.year}</span> : null}
+          </div>
+        </header>
+      </Reveal>
 
       {project.cover && typeof project.cover === 'object' ? (
-        <div className="project-detail__cover">
-          <MediaImage media={project.cover} priority sizes="100vw" />
-        </div>
+        <Reveal delay={0.1}>
+          <div className="project-detail__cover">
+            <MediaImage media={project.cover} priority sizes="100vw" />
+          </div>
+        </Reveal>
       ) : null}
 
       {project.summary ? <p className="project-detail__summary">{project.summary}</p> : null}

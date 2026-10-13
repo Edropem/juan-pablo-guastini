@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 
 import { MediaImage } from '@/components/MediaImage'
 import { PageMotion } from '@/components/PageMotion'
+import { Reveal } from '@/components/Reveal'
 import { RichText } from '@/components/RichText'
 import { getDictionary } from '@/i18n/getDictionary'
 import { isLocale, type Locale } from '@/i18n/config'
@@ -37,19 +38,25 @@ export default async function AboutPage({ params }: Props) {
 
   return (
     <PageMotion>
-      <h1 className="page-title">{about.headline || dictionary.about.title}</h1>
+      <Reveal>
+        <h1 className="page-title">{about.headline || dictionary.about.title}</h1>
+      </Reveal>
 
       {!hasContent ? <p className="empty-state">{dictionary.about.empty}</p> : null}
 
       <div className="about-layout">
-        <div>
-          <RichText data={about.bio as DefaultTypedEditorState | null | undefined} />
-          {about.credits ? <p className="about-layout__credits">{about.credits}</p> : null}
-        </div>
-        {about.portrait && typeof about.portrait === 'object' ? (
-          <div className="about-layout__portrait">
-            <MediaImage media={about.portrait} sizes="(max-width: 900px) 100vw, 40vw" />
+        <Reveal delay={0.1}>
+          <div>
+            <RichText data={about.bio as DefaultTypedEditorState | null | undefined} />
+            {about.credits ? <p className="about-layout__credits">{about.credits}</p> : null}
           </div>
+        </Reveal>
+        {about.portrait && typeof about.portrait === 'object' ? (
+          <Reveal delay={0.2}>
+            <div className="about-layout__portrait">
+              <MediaImage media={about.portrait} sizes="(max-width: 900px) 100vw, 40vw" />
+            </div>
+          </Reveal>
         ) : null}
       </div>
     </PageMotion>

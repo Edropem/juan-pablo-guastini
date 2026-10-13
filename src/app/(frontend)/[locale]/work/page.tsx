@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 
 import { PageMotion } from '@/components/PageMotion'
 import { ProjectList } from '@/components/ProjectList'
+import { Reveal } from '@/components/Reveal'
 import { WorkIndex } from '@/components/WorkIndex'
 import { getDictionary } from '@/i18n/getDictionary'
 import { isLocale, type Locale } from '@/i18n/config'
@@ -36,7 +37,9 @@ export default async function WorkPage({ params }: Props) {
 
   return (
     <PageMotion>
-      <h1 className="page-title">{dictionary.work.title}</h1>
+      <Reveal>
+        <h1 className="page-title">{dictionary.work.title}</h1>
+      </Reveal>
       {groups.length > 0 ? (
         <WorkIndex
           groups={groups}

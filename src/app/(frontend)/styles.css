@@ -19,6 +19,15 @@
   box-sizing: border-box;
 }
 
+.media-image {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.media-image--loaded {
+  opacity: 1;
+}
+
 html {
   color-scheme: dark;
   scroll-behavior: smooth;

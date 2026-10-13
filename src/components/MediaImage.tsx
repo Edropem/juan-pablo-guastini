@@ -1,4 +1,8 @@
+'use client'
+
+import clsx from 'clsx'
 import Image from 'next/image'
+import { useState } from 'react'
 
 import { getMediaAlt, getMediaUrl } from '@/lib/media'
 import type { Media } from '@/payload-types'
@@ -22,12 +26,14 @@ export function MediaImage({
   width,
   height,
 }: Props) {
+  const [loaded, setLoaded] = useState(false)
   const url = getMediaUrl(media)
   if (!url || typeof media === 'number' || !media) return null
 
   const alt = getMediaAlt(media)
   const intrinsicWidth = width ?? media.width ?? 1600
   const intrinsicHeight = height ?? media.height ?? 1200
+  const imageClassName = clsx(className, 'media-image', loaded && 'media-image--loaded')
 
   if (fill) {
     return (
@@ -35,9 +41,10 @@ export function MediaImage({
         src={url}
         alt={alt}
         fill
-        className={className}
+        className={imageClassName}
         sizes={sizes}
         priority={priority}
+        onLoad={() => setLoaded(true)}
       />
     )
   }
@@ -48,9 +55,10 @@ export function MediaImage({
       alt={alt}
       width={intrinsicWidth}
       height={intrinsicHeight}
-      className={className}
+      className={imageClassName}
       sizes={sizes}
       priority={priority}
+      onLoad={() => setLoaded(true)}
     />
   )
 }

@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react'
+import { AnimatePresence, motion, type PanInfo } from 'motion/react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 
 import { MediaImage } from '@/components/MediaImage'
@@ -16,6 +17,14 @@ type Props = {
   openGalleryLabel: string
 }
 
+const EASE = [0.22, 1, 0.36, 1] as const
+
+const slideVariants = {
+  enter: (direction: number) => ({ x: direction > 0 ? '18%' : '-18%', opacity: 0 }),
+  center: { x: 0, opacity: 1 },
+  exit: (direction: number) => ({ x: direction > 0 ? '-18%' : '18%', opacity: 0 }),
+}
+
 export function ProjectGallery({
   gallery,
   closeLabel,
@@ -28,14 +37,21 @@ export function ProjectGallery({
       Boolean(item?.image) && typeof item.image === 'object',
   )
   const [openIndex, setOpenIndex] = useState<number | null>(null)
+  const [direction, setDirection] = useState(1)
   const activeItem = openIndex !== null ? items[openIndex] : null
-  const figureRef = useRef<HTMLElement>(null)
-  const dragRef = useRef({
-    pointerId: -1,
-    startX: 0,
-    deltaX: 0,
-    active: false,
-  })
+  const viewportRef = useRef<HTMLDivElement>(null)
+
+  function goNext() {
+    setDirection(1)
+    setOpenIndex((current) => (current === null ? current : (current + 1) % items.length))
+  }
+
+  function goPrev() {
+    setDirection(-1)
+    setOpenIndex((current) =>
+      current === null ? current : (current - 1 + items.length) % items.length,
+    )
+  }
 
   useEffect(() => {
     if (openIndex === null) return
@@ -46,15 +62,11 @@ export function ProjectGallery({
         return
       }
       if (event.key === 'ArrowRight') {
-        setOpenIndex((current) =>
-          current === null ? current : (current + 1) % items.length,
-        )
+        goNext()
         return
       }
       if (event.key === 'ArrowLeft') {
-        setOpenIndex((current) =>
-          current === null ? current : (current - 1 + items.length) % items.length,
-        )
+        goPrev()
       }
     }
 
@@ -66,63 +78,21 @@ export function ProjectGallery({
       document.body.style.overflow = previousOverflow
       window.removeEventListener('keydown', onKeyDown)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openIndex, items.length])
 
-  function resetDragTransform(animate: boolean) {
-    const figure = figureRef.current
-    if (!figure) return
-    figure.style.transition = animate ? 'transform 0.22s ease' : ''
-    figure.style.transform = 'translateX(0px)'
-  }
-
-  function onPointerDown(event: PointerEvent<HTMLElement>) {
-    if (items.length < 2 || event.button !== 0) return
-    dragRef.current = {
-      pointerId: event.pointerId,
-      startX: event.clientX,
-      deltaX: 0,
-      active: true,
-    }
-    const figure = figureRef.current
-    if (figure) {
-      figure.style.transition = 'none'
-      figure.setPointerCapture(event.pointerId)
-    }
-  }
-
-  function onPointerMove(event: PointerEvent<HTMLElement>) {
-    const drag = dragRef.current
-    if (!drag.active || drag.pointerId !== event.pointerId) return
-    drag.deltaX = event.clientX - drag.startX
-    const figure = figureRef.current
-    if (figure) figure.style.transform = `translateX(${drag.deltaX}px)`
-  }
-
-  function onPointerUp(event: PointerEvent<HTMLElement>) {
-    const drag = dragRef.current
-    if (!drag.active || drag.pointerId !== event.pointerId) return
-    drag.active = false
-    const figure = figureRef.current
-    const width = figure?.offsetWidth || 1
+  function onDragEnd(_event: unknown, info: PanInfo) {
+    const width = viewportRef.current?.offsetWidth || 1
     const threshold = Math.max(48, width * 0.18)
+    const flicked = Math.abs(info.velocity.x) > 500
 
-    if (drag.deltaX <= -threshold) {
-      resetDragTransform(false)
-      setOpenIndex((current) =>
-        current === null ? current : (current + 1) % items.length,
-      )
+    if (info.offset.x <= -threshold || (flicked && info.velocity.x < 0)) {
+      goNext()
       return
     }
-
-    if (drag.deltaX >= threshold) {
-      resetDragTransform(false)
-      setOpenIndex((current) =>
-        current === null ? current : (current - 1 + items.length) % items.length,
-      )
-      return
+    if (info.offset.x >= threshold || (flicked && info.velocity.x > 0)) {
+      goPrev()
     }
-
-    resetDragTransform(true)
   }
 
   if (items.length === 0) return null
@@ -137,10 +107,7 @@ export function ProjectGallery({
       >
         <div className="project-gallery__thumbs">
           {previewItems.map((item, index) => (
-            <figure
-              key={item.id ?? index}
-              className="project-gallery__item"
-            >
+            <figure key={item.id ?? index} className="project-gallery__item">
               <div className="project-gallery__thumb">
                 <MediaImage
                   media={item.image}
@@ -151,11 +118,7 @@ export function ProjectGallery({
             </figure>
           ))}
         </div>
-        <button
-          type="button"
-          className="project-gallery__cta"
-          onClick={() => setOpenIndex(0)}
-        >
+        <button type="button" className="project-gallery__cta" onClick={() => setOpenIndex(0)}>
           <span className="project-gallery__cta-label">{openGalleryLabel}</span>
         </button>
       </div>
@@ -176,40 +139,43 @@ export function ProjectGallery({
                     type="button"
                     className="lightbox__nav lightbox__nav--prev"
                     aria-label={previousLabel}
-                    onClick={() =>
-                      setOpenIndex((current) =>
-                        current === null ? current : (current - 1 + items.length) % items.length,
-                      )
-                    }
+                    onClick={goPrev}
                   >
                     <span aria-hidden>←</span>
                   </button>
                 ) : null}
-                <figure
-                  ref={figureRef}
-                  className="lightbox__figure"
-                  onPointerDown={onPointerDown}
-                  onPointerMove={onPointerMove}
-                  onPointerUp={onPointerUp}
-                  onPointerCancel={onPointerUp}
-                >
-                  <div className="lightbox__image">
-                    <MediaImage media={activeItem.image} sizes="100vw" />
-                  </div>
-                  {activeItem.caption ? (
-                    <figcaption className="lightbox__caption">{activeItem.caption}</figcaption>
-                  ) : null}
-                </figure>
+                <div className="lightbox__viewport" ref={viewportRef}>
+                  <AnimatePresence initial={false} custom={direction} mode="popLayout">
+                    <motion.figure
+                      key={openIndex}
+                      className="lightbox__figure"
+                      custom={direction}
+                      variants={slideVariants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      transition={{ duration: 0.45, ease: EASE }}
+                      drag={items.length > 1 ? 'x' : false}
+                      dragConstraints={{ left: 0, right: 0 }}
+                      dragElastic={0.65}
+                      dragMomentum={false}
+                      onDragEnd={onDragEnd}
+                    >
+                      <div className="lightbox__image">
+                        <MediaImage media={activeItem.image} sizes="100vw" />
+                      </div>
+                      {activeItem.caption ? (
+                        <figcaption className="lightbox__caption">{activeItem.caption}</figcaption>
+                      ) : null}
+                    </motion.figure>
+                  </AnimatePresence>
+                </div>
                 {items.length > 1 ? (
                   <button
                     type="button"
                     className="lightbox__nav lightbox__nav--next"
                     aria-label={nextLabel}
-                    onClick={() =>
-                      setOpenIndex((current) =>
-                        current === null ? current : (current + 1) % items.length,
-                      )
-                    }
+                    onClick={goNext}
                   >
                     <span aria-hidden>→</span>
                   </button>

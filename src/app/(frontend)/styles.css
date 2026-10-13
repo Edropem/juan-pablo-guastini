@@ -697,11 +697,22 @@ img {
   width: min(100%, 1100px);
 }
 
+.lightbox__viewport {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+}
+
 .lightbox__figure {
   margin: 0;
   min-width: 0;
   touch-action: pan-y;
   user-select: none;
+  cursor: grab;
+}
+
+.lightbox__figure:active {
+  cursor: grabbing;
 }
 
 .lightbox__image {
@@ -916,7 +927,8 @@ img {
   }
 
   .hero__media {
-    min-height: 48vw;
+    aspect-ratio: 4 / 5;
+    min-height: 0;
     order: -1;
   }
 }

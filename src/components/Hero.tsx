@@ -46,8 +46,8 @@ export function Hero({ siteName, eyebrow, subhead, ctaLabel, ctaHref, heroImage 
     target: sectionRef,
     offset: ['start start', 'end start'],
   })
-  const imageY = useTransform(scrollYProgress, [0, 1], ['-6%', '14%'])
-  const imageScale = useTransform(scrollYProgress, [0, 1], [1.08, 1.22])
+  const imageY = useTransform(scrollYProgress, [0, 1], ['-4%', '10%'])
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.1])
 
   const words = siteName.split(' ')
 
